@@ -1,0 +1,127 @@
+<!-- fines.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Fines</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <h1>Student Fines</h1>
+    <button id="displayFinesButton">Display Fines</button>
+    <table id="finesTable"></table>
+
+    <script>
+        var stripe = Stripe('pk_test_51ORdqUSJDUJBJy6S6Zn8kPw9359M4QKXV10Kb0bl4JzZY1aP2ChrASGWkXeqkn2peNctvhi0QCm6Z5sXkjDkTpfS00XIWgM7SW');  // Replace 'pub' with your Publishable key
+
+        document.getElementById('displayFinesButton').addEventListener('click', function() {
+            var student_id = sessionStorage.getItem('student_id');
+            fetch('/fetch_fines/'  + student_id, {
+                method: 'GET',
+            }).then(function(response) {
+                if(response.ok) {
+                    response.json().then(function(fines) {
+                        console.log(fines);
+                        var table = document.getElementById('finesTable');
+                        fines.forEach(function(fine) {
+                            // Check if a row for this fine already exists
+                            var existingRow = document.querySelector('#finesTable tr[data-student-id="' + fine.student_id + '"][data-book-id="' + fine.book_id + '"]');
+                            if(existingRow) {
+                                // If the row already exists, update it
+                                existingRow.innerHTML = `
+                                    <td>${fine.student_id}</td>
+                                    <td>${fine.student_name}</td>
+                                    <td>${fine.book_id}</td>
+                                    <td>${fine.book_name}</td>
+                                    <td>${fine.fine_amount}</td>
+                                    <td><button class="payButton" data-amount="${fine.fine_amount}">Pay</button></td>
+                                `;
+                            } else {
+                                // If the row doesn't exist, create it
+                                var row = document.createElement('tr');
+                                row.dataset.studentId = fine.student_id;
+                                row.dataset.bookId = fine.book_id;
+                                row.innerHTML = `
+                                    <td>${fine.student_id}</td>
+                                    <td>${fine.student_name}</td>
+                                    <td>${fine.book_id}</td>
+                                    <td>${fine.book_name}</td>
+                                    <td>${fine.fine_amount}</td>
+                                    <td><button class="payButton" data-amount="${fine.fine_amount}">Pay</button></td>
+                                `;
+                                table.appendChild(row);
+                            }
+                        });
+
+                        // Add event listener to the 'Pay' button
+                        document.querySelectorAll('.payButton').forEach(function(button) {
+                            button.addEventListener('click', function() {
+                                var amountToPay = button.getAttribute('data-amount');
+                                initiatePayment(amountToPay);
+                            });
+                        });
+                    });
+                } else {
+                    alert('Failed to fetch fines');
+                }
+            }).catch(function(error) {
+                console.error('Error:', error);
+            });
+        });
+
+        // Function to initiate payment
+        function initiatePayment(amountToPay) {
+            var customerName = prompt("Please enter your name:");
+            var addressLine1 = prompt("Please enter your address (Line 1):");
+            var city = prompt("Please enter your city:");
+            var postalCode = prompt("Please enter your postal code:");
+            var country = prompt("Please enter your country code (ISO 3166-1 alpha-2):");
+            var customerEmail = prompt("Please enter your email:");
+
+            var customerDetails = {
+                email: customerEmail,
+                name: customerName,
+                address: {
+                    line1: addressLine1,
+                    city: city,
+                    postal_code: postalCode,
+                    country: country,
+                },
+            };
+
+            fetch("/create-checkout-session", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'amount': amountToPay,
+                    'customer_details': customerDetails,
+                })
+            }).then(function(response) {
+                return response.json();
+            }).then(function(session) {
+                if (session.requiresAction) {
+                    stripe.handleCardAction(session.payment_intent_client_secret)
+                    .then(function(result) {
+                        if (result.error) {
+                            alert(result.error.message);
+                        } else {
+                            alert('Payment succeeded!');
+                        }
+                    });
+                } else if (session.error) {
+                    alert(session.error.message);
+                } else {
+                    return stripe.redirectToCheckout({ sessionId: session.id });
+                }
+            }).catch(function(error) {
+                console.error("Error:", error);
+            });
+        }
+    </script>
+</body>
+</html>

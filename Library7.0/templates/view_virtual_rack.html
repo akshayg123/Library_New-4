@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Virtual Rack</title>
+
+    <style>
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url('https://mybayutcdn.bayut.com/mybayut/wp-content/uploads/Online-libraries-in-UAE-B-13-09.jpg');
+            background-size: cover;
+            padding-top: 10%;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
+        #bookContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            width: 80%;
+        }
+
+        .book {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            width: calc(20% - 40px);
+            cursor: pointer;
+            color: black;
+        }
+
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+    var studentId = "{{ student_id }}";  // get the student_id from the route
+    </script>
+</head>
+<body>
+    <h1>Virtual Rack</h1>
+    <div id="bookContainer">
+    {% for book in books %}
+        <div class="book" onclick="showImage('{{ book[4] }}', '{{ book[0] }}')">
+            <p>{{ book[0] }}</p>
+            <p>{{ book[1] }}</p>
+            <p>{{ book[2] }}</p>
+        </div>
+    {% endfor %}
+    </div>
+    <script>
+    function showImage(imageUrl, bookId) {
+        sessionStorage.setItem('book_id', bookId);
+        var imageDiv = document.createElement('div');
+        imageDiv.style.position = 'fixed';
+        imageDiv.style.top = '50%';
+        imageDiv.style.left = '50%';
+        imageDiv.style.transform = 'translate(-50%, -50%)';
+        imageDiv.style.backgroundColor = 'white';
+        imageDiv.style.padding = '20px';
+        imageDiv.style.border = '1px solid black';
+
+        var image = document.createElement('img');
+        image.src = imageUrl;
+        image.style.maxWidth = '100%';
+        image.style.maxHeight = '100%';
+
+        var removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove from rack';
+        removeButton.onclick = function() {
+            fetch('/remove_from_rack/' + bookId, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                window.location.href = '/view_virtual_rack';  // redirect to the virtual rack view
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+        };
+
+        var borrowButton = document.createElement('button');
+        borrowButton.textContent = 'Borrow book';
+        borrowButton.onclick = function() {
+            fetch('/new_borrow', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  student_id: studentId,  // use the studentId variable here
+                  book_id: bookId,
+                  date_of_issue: new Date().toISOString().split('T')[0] // Today's date in 'YYYY-MM-DD' format
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error('Network response was not ok: ' + text);
+                    });
+                }
+                return response.json(); // Assuming the server responds with JSON
+            })
+            .then(data => {
+                if (data.success) {
+                    // Redirect to the issue_book page or display a confirmation message
+                    window.location.href = '/issue_book';
+                } else {
+                    // Handle the case where the server did not return success
+                    console.error('Server did not return success');
+                }
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            })
+            .finally(() => {
+                // Redirect to borrow_book.html regardless of the result of the fetch operation
+                window.location.href = '/borrow_book';
+            });
+        };
+
+        imageDiv.appendChild(image);
+        imageDiv.appendChild(removeButton);
+        imageDiv.appendChild(borrowButton);
+        document.body.appendChild(imageDiv);
+
+        imageDiv.onclick = function(event) {
+            if (event.target !== removeButton && event.target !== borrowButton) {
+                document.body.removeChild(imageDiv);
+            }
+        };
+    }
+    </script>
+</body>
+</html>

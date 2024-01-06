@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Recommendations</title>
+</head>
+<body>
+    <form action="/book_recommendations" method="post">
+        <input type="text" name="search" placeholder="Enter genre or author">
+        <input type="submit" value="Get Recommendations">
+    </form>
+    {% if request.method == 'POST' %}
+        {% if books %}
+        <ul>
+            {% for book in books %}
+            <li>{{ book[1] }} by {{ book[2] }}</li>  <!-- Adjust indices based on your books table structure -->
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No books found.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

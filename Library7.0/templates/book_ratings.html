@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rate Books</title>
+    <style>
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            flex-direction: row-reverse;
+            font-size: 2em;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: lightgray;
+            transition: color 0.2s;
+        }
+
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: gold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rate Books</h1>
+    <form method="POST">
+        <label for="book_name">Book Name:</label><br>
+        <select id="book_name" name="book_name">
+            {% for book_name in book_names %}
+            <option value="{{ book_name }}">{{ book_name }}</option>
+            {% endfor %}
+        </select><br>
+        <div class="star-rating">
+            <input type="radio" id="5-stars" name="rating" value="5" />
+            <label for="5-stars" class="star">★</label>
+            <input type="radio" id="4-stars" name="rating" value="4" />
+            <label for="4-stars" class="star">★</label>
+            <input type="radio" id="3-stars" name="rating" value="3" />
+            <label for="3-stars" class="star">★</label>
+            <input type="radio" id="2-stars" name="rating" value="2" />
+            <label for="2-stars" class="star">★</label>
+            <input type="radio" id="1-star" name="rating" value="1" />
+            <label for="1-star" class="star">★</label>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        document.querySelector('.star-rating').addEventListener('change', (event) => {
+            alert('You rated this ' + event.target.value + ' stars.');
+        });
+    </script>
+</body>
+</html>

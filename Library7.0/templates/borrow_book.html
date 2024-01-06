@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Borrow Book</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+</head>
+<body>
+    <h1>Borrow Book</h1>
+    <form method="POST">
+        <label for="student_id">Student ID:</label><br>
+        <input type="text" id="student_id" name="student_id"><br>
+        <label for="book_id">Book ID:</label><br>
+        <input type="text" id="book_id" name="book_id"><br>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        // Fill student_id field with value from session
+        document.getElementById('student_id').value = sessionStorage.getItem('student_id');
+        // Fill book_id field with value from session
+        document.getElementById('book_id').value = sessionStorage.getItem('book_id');
+    </script>
+</body>
+</html>

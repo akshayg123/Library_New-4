@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Search Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Search Results</h1>
+    {% for book in books %}
+        <div class="book">
+            <p>Book ID: {{ book[0] }}</p>
+            <p>Book Name: {{ book[1] }}</p>
+            <p>Author: {{ book[2] }}</p>
+            <p>Genre: {{ book[3] }}</p>
+            <img src="{{ book[4] }}" alt="Book Cover" style="width:100px;height:150px;">
+            <form method="POST" action="{{ url_for('add_to_rack', book_id=book[0]) }}">
+                <input type="submit" value="Add to rack">
+            </form>
+        </div>
+    {% endfor %}
+</body>
+</html>

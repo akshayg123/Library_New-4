@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 20px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007BFF;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>STUDENT DASHBOARD</h1>
+    <div class="center">
+        <a class="button" href="/borrow_book">Borrow Book</a>
+        <a class="button" href="/display_books">Display Books</a>
+        <a class="button" href="/student_search">ADD TO RACK</a>
+        <a class="button" href="/view_virtual_rack">VIEW RACK</a>
+        <a class="button" href="/fines">View Fines</a>
+        <a class="button" href="/issued_books">View Borrowed Books</a>
+        <a class="button" href="/book_ratings">Rate Books</a>
+        <a class="button" href="/book_recommendations">Popular Books</a>
+
+
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Issued Books</title>
+    <!-- Add your CSS here -->
+</head>
+<body>
+    <h1>Issued Books</h1>
+    <table>
+        <tr>
+            <th>Student ID</th>
+            <th>Book ID</th>
+            <th>Date of Issue</th>
+            <th>Return Date</th>
+            <th></th>
+        </tr>
+        {% for book in books %}
+        <tr>
+            <td>{{ book[0] }}</td>
+            <td>{{ book[1] }}</td>
+            <td>{{ book[2] }}</td>
+            <td>{{ book[3] }}</td>
+            <td>
+                <button onclick="generateQRCode('{{ book[0] }}', '{{ book[1] }}', '{{ book[2] }}', '{{ book[3] }}')">Generate</button>
+                <div id="qrcode{{ book[0] }}{{ book[1] }}" style="display: none;">
+                    <span onclick="removeQRCode('qrcode{{ book[0] }}{{ book[1] }}')" style="cursor: pointer;">X</span>
+                    <div id="qrcode"></div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>  <!-- QR code library -->
+    <script src="/static/issued_books.js"></script>  <!-- Your JavaScript code -->
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Fines</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid white;
+            padding: 15px;
+            text-align: left;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+</head>
+<body>
+    <h1>Fines</h1>
+    <table>
+        <tr>
+            <th>Student ID</th>
+            <th>Book ID</th>
+            <th>Fine Amount</th>
+        </tr>
+        {% for fine in fine_details %}
+        <tr>
+            <td>{{ fine[0] }}</td>
+            <td>{{ fine[1] }}</td>
+            <td>{{ fine[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/main_menu">Back to Main Menu</a>
+</body>
+</html>

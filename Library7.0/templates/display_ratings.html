@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Ratings</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Student ID</th>
+            <th>Book ID</th>
+            <th>Rating</th>
+        </tr>
+        {% for row in ratings_data %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Issued Books</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Student ID</th>
+            <th>Book ID</th>
+            <th>Date of Issue</th>
+            <th>Return Date</th>
+        </tr>
+        {% for book_issued in books_issued %}
+        <tr>
+            <td>{{ book_issued[0] }}</td>
+            <td>{{ book_issued[1] }}</td>
+            <td>{{ book_issued[2] }}</td>
+            <td>{{ book_issued[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

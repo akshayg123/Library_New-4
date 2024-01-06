@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Book</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://mybayutcdn.bayut.com/mybayut/wp-content/uploads/Online-libraries-in-UAE-B-13-09.jpg');
+            background-color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+            width: 100%;
+            color: white;
+            position: absolute;
+            top: 0;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        form input[type="text"], form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        form input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        form input[type="submit"]:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Book</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="book_name">Book Name:</label><br>
+        <input type="text" id="book_name" name="book_name"><br>
+        <label for="book_id">Book ID:</label><br>
+        <input type="text" id="book_id" name="book_id"><br>
+        <label for="author">Author:</label><br>
+        <input type="text" id="author" name="author"><br>
+        <label for="genre">Genre:</label><br>
+        <input type="text" id="genre" name="genre"><br>
+        <label for="image">Image:</label><br>
+        <input type="file" id="image" name="image"><br>
+        <input type="submit" value="Submit">
+    </form>    
+</body>
+</html>
